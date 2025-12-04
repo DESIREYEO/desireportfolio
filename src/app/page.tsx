@@ -45,7 +45,7 @@ export default function Portfolio() {
         { name: 'Php', experience: '2+ ans' },
         { name: 'JavaScript', experience: '2+ ans' },
         { name: 'Tailwind css', experience: '2 ans' },
-        { name: 'Html', experience: '2+ ans' }
+        { name: 'Html', experience: '2+ ans' },
         { name: 'Css', experience: '2+ ans' }
 
       ]
