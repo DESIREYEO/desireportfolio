@@ -1,33 +1,34 @@
-// Créez ce fichier dans : pages/api/contact.js
-
+import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 
-export default async function handler(req, res) {
-  // Vérifier que c'est bien une requête POST
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Méthode non autorisée' });
-  }
-
-  const { name, email, service, message } = req.body;
-
-  // Validation des champs
-  if (!name || !email || !service || !message) {
-    return res.status(400).json({ error: 'Tous les champs sont requis' });
-  }
-
-  // Validation de l'email
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
-    return res.status(400).json({ error: 'Email invalide' });
-  }
-
+export async function POST(request: Request) {
   try {
+    const body = await request.json();
+    const { name, email, service, message } = body;
+
+    // Validation des champs
+    if (!name || !email || !service || !message) {
+      return NextResponse.json(
+        { error: 'Tous les champs sont requis' },
+        { status: 400 }
+      );
+    }
+
+    // Validation de l'email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return NextResponse.json(
+        { error: 'Email invalide' },
+        { status: 400 }
+      );
+    }
+
     // Configuration de Nodemailer avec Gmail
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: process.env.EMAIL_USER, // Votre email Gmail
-        pass: process.env.EMAIL_PASSWORD // Mot de passe d'application
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD
       }
     });
 
@@ -37,7 +38,7 @@ export default async function handler(req, res) {
     // Configuration de l'email
     const mailOptions = {
       from: process.env.EMAIL_USER,
-      to: 'desireyeo348@gmail.com', // Votre email de réception
+      to: 'desireyeo348@gmail.com',
       subject: `🚀 Nouveau message de ${name} - ${serviceName}`,
       html: `
         <!DOCTYPE html>
@@ -161,22 +162,22 @@ export default async function handler(req, res) {
         </body>
         </html>
       `,
-      replyTo: email // Permet de répondre directement au client
+      replyTo: email
     };
 
     // Envoi de l'email
     await transporter.sendMail(mailOptions);
 
-    // Réponse de succès
-    return res.status(200).json({ 
-      success: true, 
-      message: 'Message envoyé avec succès' 
-    });
+    return NextResponse.json(
+      { success: true, message: 'Message envoyé avec succès' },
+      { status: 200 }
+    );
 
   } catch (error) {
     console.error('Erreur lors de l\'envoi de l\'email:', error);
-    return res.status(500).json({ 
-      error: 'Erreur lors de l\'envoi du message. Veuillez réessayer.' 
-    });
+    return NextResponse.json(
+      { error: 'Erreur lors de l\'envoi du message. Veuillez réessayer.' },
+      { status: 500 }
+    );
   }
 }
