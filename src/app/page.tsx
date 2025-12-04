@@ -270,8 +270,9 @@ export default function Portfolio() {
                 alt="Désiré Yeo"
                 className="w-full h-full object-cover rounded-full"
                 onError={(e) => {
-                  e.target.style.display = 'none';
-                  e.target.parentElement.classList.add('animate-pulse');
+                  const target = e.target as HTMLImageElement;
+                  target.style.display = 'none';
+                  target.parentElement?.classList.add('animate-pulse');
                 }}
               />
             </div>
@@ -724,7 +725,7 @@ export default function Portfolio() {
                     onChange={handleInputChange}
                     required
                     placeholder="Décrivez votre projet ou vos besoins..."
-                    rows="5"
+                    rows={5}
                     className="w-full px-3 md:px-4 py-2 md:py-3 rounded-xl backdrop-blur-sm bg-gray-800/50 border border-gray-700 focus:border-white outline-none transition-colors resize-none text-white placeholder-gray-500 text-sm md:text-base"
                   />
                 </div>
