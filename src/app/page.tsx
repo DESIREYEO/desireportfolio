@@ -145,19 +145,19 @@ export default function Portfolio() {
     }
   ];
 
-  const scrollToSection = (id) => {
+  const scrollToSection = (id: string) => {
     setActiveSection(id);
     setMobileMenuOpen(false);
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
 
   // Gestion du formulaire
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     setFormStatus({ type: '', message: '' });
@@ -264,7 +264,7 @@ export default function Portfolio() {
         <div className="max-w-4xl text-center space-y-6 md:space-y-8">
           <div className="relative inline-block">
             {/* Photo de profil */}
-            <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-white shadow-2xl shadow-white/20 mx-auto mt-10 mb-4 md:mt-5 md:mb-6 bg-gradient-to-br from-white to-gray-400 p-1">
+            <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-white shadow-2xl shadow-white/20 mx-auto mb-4 md:mb-6 bg-gradient-to-br from-white to-gray-400 p-1">
               <img 
                 src="/images/profile.png" 
                 alt="Désiré Yeo"
