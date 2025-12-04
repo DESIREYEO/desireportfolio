@@ -1,13 +1,13 @@
-
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Github, Linkedin, Mail, Phone, MapPin, ExternalLink, Menu, X, Code, Palette, Database, Smartphone, ChevronRight } from 'lucide-react';
+import { Github, Linkedin, Mail, Phone, MapPin, ExternalLink, Menu, X, Code, Palette, Database, Smartphone, ChevronRight, Monitor } from 'lucide-react';
 
 export default function Portfolio() {
   const [activeSection, setActiveSection] = useState('accueil');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [activeSkillTab, setActiveSkillTab] = useState('mobile');
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -20,50 +20,36 @@ export default function Portfolio() {
   const navItems = [
     { id: 'accueil', label: 'Accueil' },
     { id: 'apropos', label: 'À propos' },
-    { id: 'experience', label: 'Expérience' },
     { id: 'competences', label: 'Compétences' },
     { id: 'projets', label: 'Projets' },
     { id: 'services', label: 'Services' },
     { id: 'contact', label: 'Contact' }
   ];
 
-  const experiences = [
-    {
-      poste: "Développeur Web Full Stack",
-      entreprise: "Bakkrô SARL",
-      periode: "Janvier 2025 - Août 2025",
-      technologies: "Next.js, Supabase",
-      description: "Développement d'applications web performantes avec Next.js"
-    },
-    {
-      poste: "Stage Développeur Web Full Stack",
-      entreprise: "Bakkrô SARL",
-      periode: "Juillet 2024 - Janvier 2025",
-      technologies: "Next.js, Github",
-      description: "Mise en œuvre de solutions web modernes"
-    },
-    {
-      poste: "Stage UI/UX DESIGN",
-      entreprise: "Rayessi SARL",
-      periode: "Octobre 2023 - Décembre 2023",
-      technologies: "Figma",
-      description: "Conception d'interfaces utilisateur intuitives"
-    },
-    {
-      poste: "Stage Développeur Web/Mobile",
-      entreprise: "Simplon Ci",
-      periode: "Juillet 2023 - Septembre 2023",
-      technologies: "PHP, MySQL",
-      description: "Développement d'applications web et mobiles"
-    }
-  ];
-
+  
   const competences = {
-    frontend: ['HTML', 'CSS', 'JavaScript', 'Next.js', 'React'],
-    backend: ['PHP', 'Laravel', 'Node.js'],
-    mobile: ['Flutter'],
-    database: ['MySQL', 'Supabase'],
-    tools: ['GitHub', 'Figma', 'Git']
+    mobile: {
+      title: 'Développement Mobile',
+      subtitle: 'Spécialisation en applications cross-platform',
+      icon: Smartphone,
+      skills: [
+        { name: 'Flutter', experience: '1+ ans' },
+        { name: 'Android Native', experience: 'Débutant' },
+      ]
+    },
+    web: {
+      title: 'Développement Web',
+      subtitle: 'Création d\'applications web modernes',
+      icon: Monitor,
+      skills: [
+        { name: 'Php', experience: '2+ ans' },
+        { name: 'JavaScript', experience: '2+ ans' },
+        { name: 'Tailwind css', experience: '2 ans' },
+        { name: 'Html', experience: '2+ ans' }
+        { name: 'Css', experience: '2+ ans' }
+
+      ]
+    }
   };
 
   const projets = [
@@ -248,119 +234,167 @@ export default function Portfolio() {
             À propos de moi
           </h2>
 
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid lg:grid-cols-2 gap-8">
+            {/* Qui suis-je ? */}
             <div className="backdrop-blur-lg bg-white/5 rounded-3xl p-8 border border-white/10 hover:bg-white/10 transition-all duration-300">
-              <h3 className="text-2xl font-bold mb-4">Mon Parcours</h3>
-              <p className="text-gray-300 leading-relaxed mb-4">
-                Fort d'une solide expérience en développement Fullstack et en web design, 
-                je dispose des compétences nécessaires pour mener à bien vos projets numériques.
-              </p>
-              <div className="space-y-2 text-gray-400">
-                <p className="flex items-center gap-2">
-                  <Mail className="w-4 h-4" />
-                  desireyeo348@gmail.com
-                </p>
-                <p className="flex items-center gap-2">
-                  <Phone className="w-4 h-4" />
-                  +225 05 56 47 44 21
-                </p>
-                <p className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4" />
-                  Abidjan, Côte d'Ivoire
-                </p>
-              </div>
-            </div>
-
-            <div className="backdrop-blur-lg bg-white/5 rounded-3xl p-8 border border-white/10 hover:bg-white/10 transition-all duration-300">
-              <h3 className="text-2xl font-bold mb-4">Compétences Transversales</h3>
-              <ul className="space-y-3">
-                {['Bon sens de communication', 'Travail en équipe', 'Capacités d\'analyse', 'Autodidacte'].map((skill, i) => (
-                  <li key={i} className="flex items-center gap-3 text-gray-300">
-                    <ChevronRight className="w-5 h-5 text-purple-400" />
-                    {skill}
-                  </li>
-                ))}
-              </ul>
-
-              <h3 className="text-2xl font-bold mt-8 mb-4">Centres d'Intérêts</h3>
-              <div className="flex flex-wrap gap-2">
-                {['Art Martial (Kung-fu wushu)', 'Lectures', 'Voyages'].map((interest, i) => (
-                  <span key={i} className="px-4 py-2 rounded-full bg-white/10 text-sm">
-                    {interest}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Expérience Section */}
-      <section id="experience" className="min-h-screen flex items-center justify-center px-4 py-20">
-        <div className="max-w-6xl w-full">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-            Parcours Professionnel
-          </h2>
-
-          <div className="space-y-6">
-            {experiences.map((exp, i) => (
-              <div
-                key={i}
-                className="backdrop-blur-lg bg-white/5 rounded-2xl p-6 border border-white/10 hover:bg-white/10 transition-all duration-300 hover:scale-[1.02]"
-              >
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
-                  <div>
-                    <h3 className="text-2xl font-bold text-purple-300">{exp.poste}</h3>
-                    <p className="text-gray-300">{exp.entreprise}</p>
+              <h3 className="text-3xl font-bold mb-8">Qui suis-je ?</h3>
+              
+              <div className="space-y-6">
+                <div>
+                  <div className="flex items-center gap-3 mb-3">
+                    <MapPin className="w-5 h-5 text-gray-400" />
+                    <h4 className="text-xl font-semibold text-white">Localisation</h4>
                   </div>
-                  <span className="text-sm text-gray-400 mt-2 md:mt-0">{exp.periode}</span>
+                  <p className="text-gray-400 ml-8">Abidjan, Côte d'Ivoire</p>
                 </div>
-                <p className="text-gray-400 mb-3">{exp.description}</p>
-                <div className="flex flex-wrap gap-2">
-                  {exp.technologies.split(', ').map((tech, j) => (
-                    <span key={j} className="px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 text-sm">
-                      {tech}
-                    </span>
-                  ))}
+
+                <div>
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-5 h-5 text-gray-400">📚</div>
+                    <h4 className="text-xl font-semibold text-white">Formation</h4>
+                  </div>
+                  <p className="text-gray-300 ml-8 font-medium">Licence en Informatique Développeur d'Application</p>
+                  <p className="text-gray-400 ml-8 text-sm">École supérieure des hautes études technologiques</p>
+                </div>
+
+                <div>
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-5 h-5 text-gray-400">💼</div>
+                    <h4 className="text-xl font-semibold text-white">Expérience</h4>
+                  </div>
+                  <p className="text-gray-300 ml-8 font-medium">3+ années en développement Full-Stack</p>
+                  <p className="text-gray-400 ml-8 text-sm">Spécialisé en architecture logicielle et mobile</p>
+                </div>
+
+                <div>
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-5 h-5 text-gray-400">❤️</div>
+                    <h4 className="text-xl font-semibold text-white">Passion</h4>
+                  </div>
+                  <p className="text-gray-400 ml-8">Innovation technologique et solutions créatives</p>
                 </div>
               </div>
-            ))}
+            </div>
+
+            {/* Valeurs */}
+            <div className="space-y-6">
+              <div className="backdrop-blur-lg bg-white/5 rounded-3xl p-8 border border-white/10 hover:bg-white/10 transition-all duration-300">
+                <div className="flex items-start gap-4">
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center flex-shrink-0">
+                    <Code className="w-7 h-7 text-purple-400" />
+                  </div>
+                  <div>
+                    <h4 className="text-2xl font-bold mb-3">Innovation</h4>
+                    <p className="text-gray-400 leading-relaxed">
+                      J'adopte les technologies émergentes comme Flutter et React pour créer des solutions modernes et performantes qui répondent aux défis actuels.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="backdrop-blur-lg bg-white/5 rounded-3xl p-8 border border-white/10 hover:bg-white/10 transition-all duration-300">
+                <div className="flex items-start gap-4">
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center flex-shrink-0">
+                    <div className="text-3xl">⚡</div>
+                  </div>
+                  <div>
+                    <h4 className="text-2xl font-bold mb-3">Performance</h4>
+                    <p className="text-gray-400 leading-relaxed">
+                      Optimisation constante des architectures et du code pour des applications rapides, scalables et efficaces en production.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="backdrop-blur-lg bg-white/5 rounded-3xl p-8 border border-white/10 hover:bg-white/10 transition-all duration-300">
+                <div className="flex items-start gap-4">
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-pink-500/20 to-purple-500/20 flex items-center justify-center flex-shrink-0">
+                    <div className="text-3xl">👥</div>
+                  </div>
+                  <div>
+                    <h4 className="text-2xl font-bold mb-3">Collaboration</h4>
+                    <p className="text-gray-400 leading-relaxed">
+                      Travail en équipe agile avec une communication transparente pour livrer des projets qui dépassent les attentes.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Compétences Section */}
+      {/* Compétences Section - NOUVELLE VERSION */}
       <section id="competences" className="min-h-screen flex items-center justify-center px-4 py-20">
         <div className="max-w-6xl w-full">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+        <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
             Compétences Techniques
           </h2>
+          {/* Tabs */}
+          <div className="flex justify-center gap-4 mb-12 flex-wrap">
+            {Object.entries(competences).map(([key, data]) => {
+              const Icon = data.icon;
+              return (
+                <button
+                  key={key}
+                  onClick={() => setActiveSkillTab(key)}
+                  className={`flex items-center gap-3 px-6 py-3 rounded-full border-2 transition-all duration-300 ${
+                    activeSkillTab === key
+                      ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white border-purple-400'
+                      : 'bg-white/5 text-white border-white/20 hover:border-purple-400 hover:bg-white/10'
+                  }`}
+                >
+                  <Icon size={20} />
+                  <span className="font-medium">{data.title}</span>
+                </button>
+              );
+            })}
+          </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {Object.entries(competences).map(([category, skills]) => (
-              <div
-                key={category}
-                className="backdrop-blur-lg bg-white/5 rounded-2xl p-6 border border-white/10 hover:bg-white/10 transition-all duration-300"
-              >
-                <h3 className="text-xl font-bold mb-4 capitalize text-purple-300">
-                  {category === 'frontend' && 'Frontend'}
-                  {category === 'backend' && 'Backend'}
-                  {category === 'mobile' && 'Mobile'}
-                  {category === 'database' && 'Base de Données'}
-                  {category === 'tools' && 'Outils'}
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {skills.map((skill, i) => (
-                    <span
-                      key={i}
-                      className="px-3 py-2 rounded-lg bg-white/10 text-sm hover:bg-white/20 transition-colors"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            ))}
+          {/* Content */}
+          <div className="backdrop-blur-lg bg-white/5 rounded-3xl p-8 md:p-12 border border-white/10">
+            {Object.entries(competences).map(([key, data]) => {
+              const Icon = data.icon;
+              return (
+                activeSkillTab === key && (
+                  <div key={key} className="space-y-8">
+                    {/* Header */}
+                    <div className="flex items-start gap-4">
+                      <div className="p-3 bg-purple-500/20 rounded-xl border border-purple-400/30">
+                        <Icon size={32} className="text-purple-300" />
+                      </div>
+                      <div>
+                        <h2 className="text-3xl md:text-4xl font-bold mb-2 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                          {data.title}
+                        </h2>
+                        <p className="text-gray-300 text-lg">
+                          {data.subtitle}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Skills Grid */}
+                    <div className="grid md:grid-cols-2 gap-6 mt-8">
+                      {data.skills.map((skill, index) => (
+                        <div
+                          key={index}
+                          className="bg-white/5 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300 border border-white/10 hover:border-purple-400/50"
+                        >
+                          <div className="flex justify-between items-center mb-2">
+                            <h3 className="text-xl font-semibold text-white">
+                              {skill.name}
+                            </h3>
+                            <span className="text-sm px-3 py-1 rounded-full bg-purple-500/30 text-purple-200 border border-purple-400/50">
+                              {skill.experience}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )
+              );
+            })}
           </div>
         </div>
       </section>
