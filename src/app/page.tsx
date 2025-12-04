@@ -8,6 +8,16 @@ export default function Portfolio() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [activeSkillTab, setActiveSkillTab] = useState('mobile');
+  
+  // État pour le formulaire
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    service: '',
+    message: ''
+  });
+  const [formStatus, setFormStatus] = useState({ type: '', message: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -28,15 +38,6 @@ export default function Portfolio() {
 
   
   const competences = {
-    mobile: {
-      title: 'Développement Mobile',
-      subtitle: 'Spécialisation en applications cross-platform',
-      icon: Smartphone,
-      skills: [
-        { name: 'Flutter', experience: '1 ans' },
-        { name: 'Android Native', experience: 'Débutant' },
-      ]
-    },
     web: {
       title: 'Développement Web',
       subtitle: 'Création d\'applications web modernes',
@@ -44,11 +45,20 @@ export default function Portfolio() {
       skills: [
         { name: 'Php', experience: '2+ ans' },
         { name: 'JavaScript', experience: '2+ ans' },
-        { name: 'Tailwind css', experience: '2 ans' },
+        { name: 'Tailwind CSS', experience: '2 ans' },
         { name: 'Html', experience: '2+ ans' },
-        { name: 'Css', experience: '2+ ans' },
         { name: 'Next js', experience: '2 ans' },
         { name: 'Laravel', experience: '2 ans' }
+      ]
+    },
+
+    mobile: {
+      title: 'Développement Mobile',
+      subtitle: 'Spécialisation en applications cross-platform',
+      icon: Smartphone,
+      skills: [
+        { name: 'Flutter', experience: '1 ans' },
+        { name: 'Android Native', experience: 'Débutant' },
       ]
     },
 
@@ -141,6 +151,48 @@ export default function Portfolio() {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  // Gestion du formulaire
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setFormStatus({ type: '', message: '' });
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setFormStatus({ 
+          type: 'success', 
+          message: 'Message envoyé avec succès ! Je vous répondrai bientôt.' 
+        });
+        setFormData({ name: '', email: '', service: '', message: '' });
+      } else {
+        setFormStatus({ 
+          type: 'error', 
+          message: data.error || 'Une erreur est survenue. Veuillez réessayer.' 
+        });
+      }
+    } catch (error) {
+      setFormStatus({ 
+        type: 'error', 
+        message: 'Erreur de connexion. Veuillez réessayer plus tard.' 
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-green-900 to-slate-900 text-white relative overflow-hidden">
       {/* Animated Background */}
@@ -207,11 +259,23 @@ export default function Portfolio() {
         )}
       </nav>
 
-      {/* Accueil Section */}
+      {/* Accueil Section avec Photo */}
       <section id="accueil" className="min-h-screen flex items-center justify-center px-4 pt-16">
         <div className="max-w-4xl text-center space-y-8">
           <div className="relative inline-block">
-            <div className="w-32 h-32 rounded-full bg-gradient-to-r from-orange-400 to-green-400 animate-pulse mx-auto mb-8" />
+            {/* Photo de profil */}
+            <div className="w-40 h-40 rounded-full overflow-hidden border-4 border-orange-400 shadow-2xl shadow-orange-500/50 mx-auto mt-6 mb-6 bg-gradient-to-br from-orange-400 to-green-400 p-1">
+              <img 
+                src="/images/profile.png" 
+                alt="Désiré Yeo"
+                className="w-full h-full object-cover rounded-full"
+                onError={(e) => {
+                  // Si l'image ne charge pas, afficher un placeholder animé
+                  e.target.style.display = 'none';
+                  e.target.parentElement.classList.add('animate-pulse');
+                }}
+              />
+            </div>
           </div>
           
           <h1 className="text-5xl md:text-7xl font-bold mb-4">
@@ -535,7 +599,7 @@ aux besoins des utilisateurs.</h2>
         </div>
       </section>
 
-      {/* Contact Section */}
+      {/* Contact Section avec Formulaire Fonctionnel */}
       <section id="contact" className="min-h-screen flex items-center justify-center px-4 py-20">
         <div className="max-w-6xl w-full">
           <div className="text-center mb-8">
@@ -597,11 +661,25 @@ aux besoins des utilisateurs.</h2>
             <div className="backdrop-blur-lg bg-white/5 rounded-3xl p-8 border border-white/10">
               <h3 className="text-2xl font-bold mb-6">Envoyez-moi un message</h3>
               
-              <form className="space-y-5">
+              <form onSubmit={handleSubmit} className="space-y-5">
+                {formStatus.message && (
+                  <div className={`p-4 rounded-xl border ${
+                    formStatus.type === 'success' 
+                      ? 'bg-green-500/10 border-green-500/50 text-green-300' 
+                      : 'bg-red-500/10 border-red-500/50 text-red-300'
+                  }`}>
+                    {formStatus.message}
+                  </div>
+                )}
+
                 <div>
                   <label className="block text-sm text-gray-300 mb-2">Nom complet</label>
                   <input
                     type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    required
                     placeholder="Votre nom complet"
                     className="w-full px-4 py-3 rounded-xl backdrop-blur-sm bg-white/10 border border-white/20 focus:border-orange-400 outline-none transition-colors text-white placeholder-gray-500"
                   />
@@ -611,6 +689,10 @@ aux besoins des utilisateurs.</h2>
                   <label className="block text-sm text-gray-300 mb-2">Adresse email</label>
                   <input
                     type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    required
                     placeholder="votre@email.com"
                     className="w-full px-4 py-3 rounded-xl backdrop-blur-sm bg-white/10 border border-white/20 focus:border-orange-400 outline-none transition-colors text-white placeholder-gray-500"
                   />
@@ -619,6 +701,10 @@ aux besoins des utilisateurs.</h2>
                 <div>
                   <label className="block text-sm text-gray-300 mb-2">Service</label>
                   <select
+                    name="service"
+                    value={formData.service}
+                    onChange={handleInputChange}
+                    required
                     className="w-full px-4 py-3 rounded-xl backdrop-blur-sm bg-white/10 border border-white/20 focus:border-orange-400 outline-none transition-colors text-white"
                   >
                     <option value="" className="bg-slate-800">Sélectionnez un service</option>
@@ -630,6 +716,10 @@ aux besoins des utilisateurs.</h2>
                 <div>
                   <label className="block text-sm text-gray-300 mb-2">Message</label>
                   <textarea
+                    name="message"
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    required
                     placeholder="Décrivez votre projet ou vos besoins..."
                     rows="6"
                     className="w-full px-4 py-3 rounded-xl backdrop-blur-sm bg-white/10 border border-white/20 focus:border-orange-400 outline-none transition-colors resize-none text-white placeholder-gray-500"
@@ -638,10 +728,11 @@ aux besoins des utilisateurs.</h2>
 
                 <button
                   type="submit"
-                  className="w-full px-6 py-4 rounded-xl bg-gradient-to-r from-orange-500 to-green-500 hover:from-orange-600 hover:to-green-600 transition-all duration-300 transform hover:scale-105 font-medium flex items-center justify-center gap-2"
+                  disabled={isSubmitting}
+                  className="w-full px-6 py-4 rounded-xl bg-gradient-to-r from-orange-500 to-green-500 hover:from-orange-600 hover:to-green-600 transition-all duration-300 transform hover:scale-105 font-medium flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                 >
                   <Mail className="w-5 h-5" />
-                  Envoyer le message
+                  {isSubmitting ? 'Envoi en cours...' : 'Envoyer le message'}
                 </button>
               </form>
             </div>
