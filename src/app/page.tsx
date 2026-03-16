@@ -1,15 +1,14 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Github, Linkedin, Mail, Phone, MapPin, ExternalLink, Menu, X, Code, Palette, Database, Smartphone, ChevronRight, Monitor } from 'lucide-react';
+import { Github, Linkedin, Mail, Phone, MapPin, ExternalLink, Menu, X, Code, Smartphone, Monitor } from 'lucide-react';
 
 export default function Portfolio() {
   const [activeSection, setActiveSection] = useState('accueil');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [activeSkillTab, setActiveSkillTab] = useState('mobile');
-  
-  // État pour le formulaire
+  const [activeSkillTab, setActiveSkillTab] = useState('web');
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -27,6 +26,23 @@ export default function Portfolio() {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
+  useEffect(() => {
+    const elements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+    elements.forEach(el => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
   const navItems = [
     { id: 'accueil', label: 'Accueil' },
     { id: 'apropos', label: 'À propos' },
@@ -36,7 +52,6 @@ export default function Portfolio() {
     { id: 'contact', label: 'Contact' }
   ];
 
-  
   const competences = {
     web: {
       title: 'Développement Web',
@@ -51,7 +66,6 @@ export default function Portfolio() {
         { name: 'Laravel', experience: '2 ans' }
       ]
     },
-
     mobile: {
       title: 'Développement Mobile',
       subtitle: 'Spécialisation en applications cross-platform',
@@ -61,7 +75,6 @@ export default function Portfolio() {
         { name: 'Android Native', experience: 'Débutant' },
       ]
     },
-
     devops: {
       title: 'DevOps & Architecture',
       subtitle: 'Déploiement et gestion d\'infrastructure',
@@ -77,8 +90,24 @@ export default function Portfolio() {
 
   const projets = [
     {
+      titre: "XhSkillsAcademy",
+      description: "Plateforme de formation pour les agrnts de santé aves un dashbord pour les instructeurs, apprenants et administrateur XhSkillsAcademy",
+      technologies: ["Laravel", "Mysql", "Tailwind CSS", "Github"],
+      image: "/images/xhskills.png",
+      github: "https://github.com/DESIREYEO",
+      demo: "https://xhskillsacademy.com/"
+    },
+    {
+      titre: "Souclou Côte d'ivoire",
+      description: "Plateforme de mise en rélation entre agence de cours a domicile et parents d'élèves avec dashboard de gestion des activités des agences",
+      technologies: ["Laravel", "Mysql", "Tailwind CSS", "Github"],
+      image: "/images/souclou.png",
+      github: "https://github.com/DESIREYEO",
+      demo: "https://souclou.ci/"
+    },
+    {
       titre: "Maitre de maison côte d'ivoire",
-      description: "Plateforme de mise en rélation entre parents d'élèves et répétiteurs",
+      description: "Plateforme de mise en rélation entre parents d'élèves et répétiteurs avec un dashboard de gestion",
       technologies: ["Laravel", "Mysql", "Tailwind CSS", "Github"],
       image: "/images/mdm.png",
       github: "https://github.com/DESIREYEO",
@@ -92,38 +121,34 @@ export default function Portfolio() {
       github: "https://github.com/DESIREYEO",
       demo: "https://xn--bakkr-bua.com/"
     },
-
     {
       titre: "Xhub",
       description: "Plateforme web de gestion de rservations d'espace de burreaux et espace coworking",
-      technologies: ["Laravel", "Mysql", "Tailwind CSS","Github"  ],
+      technologies: ["Laravel", "Mysql", "Tailwind CSS", "Github"],
       image: "/images/xhub.png",
       github: "https://github.com/DESIREYEO",
       demo: "https://github.com/DESIREYEO"
     },
-
     {
       titre: "Y_Gestion",
       description: "Plateforme web de gestion d'employés avec deux type d'utilisateurs Administrateur et employés",
-      technologies: ["Php", "Mysql", "Html", "Css" ],
+      technologies: ["Php", "Mysql", "Html", "Css"],
       image: "/images/ygestion.png",
       github: "https://github.com/DESIREYEO",
       demo: "https://github.com/DESIREYEO"
     },
-
     {
       titre: "LinkedinLocal",
       description: "Plateforme web de vote en ligne dont l'objectif est de faire la promotion des personnalités du web en côte d'ivoire",
-      technologies: ["Php", "Mysql", "Html", "Css" ],
+      technologies: ["Php", "Mysql", "Html", "Css"],
       image: "/images/linkedinlocal.png",
       github: "https://github.com/DESIREYEO",
       demo: "https://github.com/DESIREYEO"
     },
-
     {
       titre: "Todo",
       description: "Todo est une application mobile de gestion de tâches",
-      technologies: ["Flutter", "Mysql", ],
+      technologies: ["Flutter", "Mysql"],
       image: "/images/todo.png",
       github: "https://github.com/DESIREYEO",
       demo: "https://github.com/DESIREYEO"
@@ -151,7 +176,6 @@ export default function Portfolio() {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  // Gestion du formulaire
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -172,32 +196,34 @@ export default function Portfolio() {
       const data = await response.json();
 
       if (response.ok) {
-        setFormStatus({ 
-          type: 'success', 
-          message: 'Message envoyé avec succès ! Je vous répondrai bientôt.' 
+        setFormStatus({
+          type: 'success',
+          message: 'Message envoyé avec succès ! Je vous répondrai bientôt.'
         });
         setFormData({ name: '', email: '', service: '', message: '' });
       } else {
-        setFormStatus({ 
-          type: 'error', 
-          message: data.error || 'Une erreur est survenue. Veuillez réessayer.' 
+        setFormStatus({
+          type: 'error',
+          message: data.error || 'Une erreur est survenue. Veuillez réessayer.'
         });
       }
-    } catch (error) {
-      setFormStatus({ 
-        type: 'error', 
-        message: 'Erreur de connexion. Veuillez réessayer plus tard.' 
+    } catch {
+      setFormStatus({
+        type: 'error',
+        message: 'Erreur de connexion. Veuillez réessayer plus tard.'
       });
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  const delayClass = (n: number) => `reveal-delay-${n}`;
+
   return (
     <div className="min-h-screen bg-black text-white relative overflow-hidden">
       {/* Animated Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div 
+        <div
           className="absolute w-96 h-96 bg-white rounded-full mix-blend-overlay filter blur-3xl opacity-5 animate-blob"
           style={{
             top: `${mousePosition.y / 10}px`,
@@ -215,8 +241,6 @@ export default function Portfolio() {
             <div className="text-2xl font-bold text-white">
               DY
             </div>
-
-            {/* Desktop Menu */}
             <div className="hidden md:flex space-x-1">
               {navItems.map(item => (
                 <button
@@ -232,8 +256,6 @@ export default function Portfolio() {
                 </button>
               ))}
             </div>
-
-            {/* Mobile Menu Button */}
             <button
               className="md:hidden p-2"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -242,8 +264,6 @@ export default function Portfolio() {
             </button>
           </div>
         </div>
-
-        {/* Mobile Menu */}
         {mobileMenuOpen && (
           <div className="md:hidden backdrop-blur-xl bg-black/95 border-t border-gray-800">
             {navItems.map(item => (
@@ -259,14 +279,13 @@ export default function Portfolio() {
         )}
       </nav>
 
-      {/* Accueil Section avec Photo */}
+      {/* Accueil Section */}
       <section id="accueil" className="min-h-screen flex items-center justify-center px-4 pt-20 md:pt-16">
-        <div className="max-w-4xl text-center space-y-6 md:space-y-8">
+        <div className="reveal max-w-4xl text-center space-y-6 md:space-y-8">
           <div className="relative inline-block">
-            {/* Photo de profil */}
             <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-white shadow-2xl shadow-white/20 mx-auto mb-4 md:mb-6 bg-gradient-to-br from-white to-gray-400 p-1">
-              <img 
-                src="/images/profile.png" 
+              <img
+                src="/images/profile.png"
                 alt="Désiré Yeo"
                 className="w-full h-full object-cover rounded-full"
                 onError={(e) => {
@@ -277,22 +296,16 @@ export default function Portfolio() {
               />
             </div>
           </div>
-          
           <h1 className="text-4xl md:text-7xl font-bold mb-4">
-            <span className="text-white">
-              YEO LAURENT DÉSIRÉ
-            </span>
+            <span className="text-white">YEO LAURENT DÉSIRÉ</span>
           </h1>
-          
           <p className="text-lg md:text-2xl text-gray-400">
             Développeur Web/Mobile Full Stack
           </p>
-          
           <p className="text-base md:text-lg text-gray-500 max-w-2xl mx-auto">
-            Passionné par la création d'expériences numériques innovantes, j'allie créativité, 
+            Passionné par la création d'expériences numériques innovantes, j'allie créativité,
             rigueur et compétences techniques pour concevoir des solutions performantes.
           </p>
-
           <div className="flex justify-center space-x-4 md:space-x-6 pt-6 md:pt-8">
             <a
               href="https://www.linkedin.com/in/laurent-desire-yeo-48903923a/"
@@ -317,7 +330,6 @@ export default function Portfolio() {
               <Mail className="w-5 h-5 md:w-6 md:h-6" />
             </a>
           </div>
-
           <button
             onClick={() => scrollToSection('contact')}
             className="mt-6 md:mt-8 px-6 md:px-8 py-3 md:py-4 rounded-full bg-white text-black hover:bg-gray-200 transition-all duration-300 transform hover:scale-105 shadow-lg font-medium"
@@ -330,18 +342,15 @@ export default function Portfolio() {
       {/* À propos Section */}
       <section id="apropos" className="min-h-screen flex items-center justify-center px-4 py-12 md:py-16">
         <div className="max-w-6xl w-full">
-          <h2 className="text-3xl md:text-5xl font-bold text-center mb-10 md:mb-16 text-white">
+          <h2 className="reveal text-3xl md:text-5xl font-bold text-center mb-10 md:mb-16 text-white">
             À propos de moi
           </h2>
-
           <div className="grid lg:grid-cols-2 gap-6 md:gap-8">
             {/* Qui suis-je ? */}
-            <div className="backdrop-blur-lg bg-gray-900/50 rounded-3xl p-6 md:p-8 border border-gray-800 hover:bg-gray-900/70 transition-all duration-300">
+            <div className="reveal reveal-left reveal-delay-1 backdrop-blur-lg bg-gray-900/50 rounded-3xl p-6 md:p-8 border border-gray-800 hover:bg-gray-900/70 transition-all duration-300">
               <h3 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8">Qui suis-je ?</h3>
-              
               <div className="space-y-5 md:space-y-6">
-               <p className="text-gray-300 leading-relaxed">Je dispose d'une solide expérience en développement Fullstack et en web design. J'allie créativité, rigueur et compétences techniques afin de concevoir des solutions performantes et adaptées aux besoins des utilisateurs.</p>
-
+                <p className="text-gray-300 leading-relaxed">Je dispose d&apos;une solide expérience en développement Fullstack et en web design. J&apos;allie créativité, rigueur et compétences techniques afin de concevoir des solutions performantes et adaptées aux besoins des utilisateurs.</p>
                 <div>
                   <div className="flex items-center gap-3 mb-2 md:mb-3">
                     <div className="w-5 h-5 text-gray-400">📚</div>
@@ -350,7 +359,6 @@ export default function Portfolio() {
                   <p className="text-gray-300 ml-8 font-medium text-sm md:text-base">Formation Professionnel en Développement Web/Mobile</p>
                   <p className="text-gray-400 ml-8 text-xs md:text-sm">Simplon côte d'ivoire</p>
                 </div>
-
                 <div>
                   <div className="flex items-center gap-3 mb-2 md:mb-3">
                     <div className="w-5 h-5 text-gray-400">💼</div>
@@ -359,7 +367,6 @@ export default function Portfolio() {
                   <p className="text-gray-300 ml-8 font-medium text-sm md:text-base">2+ années en développement Full-Stack</p>
                   <p className="text-gray-400 ml-8 text-xs md:text-sm">Spécialisé en dévéloppement web et mobile</p>
                 </div>
-
                 <div>
                   <div className="flex items-center gap-3 mb-2 md:mb-3">
                     <div className="w-5 h-5 text-gray-400">❤️</div>
@@ -372,7 +379,7 @@ export default function Portfolio() {
 
             {/* Valeurs */}
             <div className="space-y-4 md:space-y-6">
-              <div className="backdrop-blur-lg bg-gray-900/50 rounded-3xl p-6 md:p-8 border border-gray-800 hover:bg-gray-900/70 transition-all duration-300">
+              <div className="reveal reveal-right reveal-delay-2 backdrop-blur-lg bg-gray-900/50 rounded-3xl p-6 md:p-8 border border-gray-800 hover:bg-gray-900/70 transition-all duration-300">
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-gray-800 flex items-center justify-center flex-shrink-0">
                     <Code className="w-6 h-6 md:w-7 md:h-7 text-white" />
@@ -385,8 +392,7 @@ export default function Portfolio() {
                   </div>
                 </div>
               </div>
-
-              <div className="backdrop-blur-lg bg-gray-900/50 rounded-3xl p-6 md:p-8 border border-gray-800 hover:bg-gray-900/70 transition-all duration-300">
+              <div className="reveal reveal-right reveal-delay-3 backdrop-blur-lg bg-gray-900/50 rounded-3xl p-6 md:p-8 border border-gray-800 hover:bg-gray-900/70 transition-all duration-300">
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-gray-800 flex items-center justify-center flex-shrink-0">
                     <div className="text-2xl md:text-3xl">⚡</div>
@@ -399,8 +405,7 @@ export default function Portfolio() {
                   </div>
                 </div>
               </div>
-
-              <div className="backdrop-blur-lg bg-gray-900/50 rounded-3xl p-6 md:p-8 border border-gray-800 hover:bg-gray-900/70 transition-all duration-300">
+              <div className="reveal reveal-right reveal-delay-4 backdrop-blur-lg bg-gray-900/50 rounded-3xl p-6 md:p-8 border border-gray-800 hover:bg-gray-900/70 transition-all duration-300">
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-gray-800 flex items-center justify-center flex-shrink-0">
                     <div className="text-2xl md:text-3xl">👥</div>
@@ -421,11 +426,10 @@ export default function Portfolio() {
       {/* Compétences Section */}
       <section id="competences" className="min-h-screen flex items-center justify-center px-4 py-12 md:py-16">
         <div className="max-w-6xl w-full">
-        <h2 className="text-3xl md:text-5xl font-bold text-center mb-10 md:mb-16 text-white">
+          <h2 className="reveal text-3xl md:text-5xl font-bold text-center mb-10 md:mb-16 text-white">
             Compétences Techniques
           </h2>
-          {/* Tabs */}
-          <div className="flex justify-center gap-3 md:gap-4 mb-8 md:mb-12 flex-wrap">
+          <div className="reveal reveal-delay-1 flex justify-center gap-3 md:gap-4 mb-8 md:mb-12 flex-wrap">
             {Object.entries(competences).map(([key, data]) => {
               const Icon = data.icon;
               return (
@@ -444,15 +448,12 @@ export default function Portfolio() {
               );
             })}
           </div>
-
-          {/* Content */}
-          <div className="backdrop-blur-lg bg-gray-900/50 rounded-3xl p-6 md:p-12 border border-gray-800">
+          <div className="reveal reveal-delay-2 backdrop-blur-lg bg-gray-900/50 rounded-3xl p-6 md:p-12 border border-gray-800">
             {Object.entries(competences).map(([key, data]) => {
               const Icon = data.icon;
               return (
                 activeSkillTab === key && (
                   <div key={key} className="space-y-6 md:space-y-8">
-                    {/* Header */}
                     <div className="flex items-start gap-3 md:gap-4">
                       <div className="p-2 md:p-3 bg-gray-800 rounded-xl border border-gray-700">
                         <Icon size={24} className="md:w-8 md:h-8 text-white" />
@@ -466,8 +467,6 @@ export default function Portfolio() {
                         </p>
                       </div>
                     </div>
-
-                    {/* Skills Grid */}
                     <div className="grid md:grid-cols-2 gap-4 md:gap-6 mt-6 md:mt-8">
                       {data.skills.map((skill, index) => (
                         <div
@@ -496,31 +495,26 @@ export default function Portfolio() {
       {/* Projets Section */}
       <section id="projets" className="min-h-screen flex items-center justify-center px-4 py-12 md:py-16">
         <div className="max-w-6xl w-full">
-          <h2 className="text-3xl md:text-5xl font-bold text-center mb-10 md:mb-16 text-white">
+          <h2 className="reveal text-3xl md:text-5xl font-bold text-center mb-10 md:mb-16 text-white">
             Projets Récents
           </h2>
-
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
             {projets.map((projet, i) => (
               <div
                 key={i}
-                className="backdrop-blur-lg bg-gray-900/50 rounded-2xl border border-gray-800 hover:bg-gray-900/70 transition-all duration-300 hover:scale-105 flex flex-col overflow-hidden group"
+                className={`reveal ${delayClass((i % 3) + 1)} backdrop-blur-lg bg-gray-900/50 rounded-2xl border border-gray-800 hover:bg-gray-900/70 transition-all duration-300 hover:scale-105 flex flex-col overflow-hidden group`}
               >
-                {/* Image du projet */}
                 <div className="relative h-40 md:h-48 overflow-hidden">
-                  <img 
-                    src={projet.image} 
+                  <img
+                    src={projet.image}
                     alt={projet.titre}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-60" />
                 </div>
-
-                {/* Contenu */}
                 <div className="p-5 md:p-6 flex flex-col flex-grow">
                   <h3 className="text-lg md:text-xl font-bold mb-2 md:mb-3 text-white">{projet.titre}</h3>
                   <p className="text-gray-400 mb-3 md:mb-4 flex-grow text-sm md:text-base">{projet.description}</p>
-                  
                   <div className="flex flex-wrap gap-2 mb-3 md:mb-4">
                     {projet.technologies.map((tech, j) => (
                       <span key={j} className="px-2 py-1 rounded bg-gray-800 text-gray-300 text-xs">
@@ -528,7 +522,6 @@ export default function Portfolio() {
                       </span>
                     ))}
                   </div>
-
                   <div className="flex gap-3 justify-center">
                     <a
                       href={projet.github}
@@ -559,15 +552,14 @@ export default function Portfolio() {
       {/* Services Section */}
       <section id="services" className="min-h-screen flex items-center justify-center px-4 py-12 md:py-16">
         <div className="max-w-6xl w-full">
-          <h2 className="text-3xl md:text-5xl font-bold text-center mb-10 md:mb-16 text-white">
+          <h2 className="reveal text-3xl md:text-5xl font-bold text-center mb-10 md:mb-16 text-white">
             Services
           </h2>
-
           <div className="grid md:grid-cols-2 gap-5 md:gap-6">
             {services.map((service, i) => (
               <div
                 key={i}
-                className="backdrop-blur-lg bg-gray-900/50 rounded-2xl p-6 md:p-8 border border-gray-800 hover:bg-gray-900/70 transition-all duration-300 hover:scale-105"
+                className={`reveal ${delayClass(i + 1)} backdrop-blur-lg bg-gray-900/50 rounded-2xl p-6 md:p-8 border border-gray-800 hover:bg-gray-900/70 transition-all duration-300 hover:scale-105`}
               >
                 <div className="flex items-start gap-4 md:gap-6 mb-5 md:mb-6">
                   <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gray-800 flex items-center justify-center flex-shrink-0 border border-gray-700">
@@ -578,7 +570,6 @@ export default function Portfolio() {
                     <p className="text-gray-400 text-sm md:text-base">{service.description}</p>
                   </div>
                 </div>
-                
                 <ul className="space-y-2 md:space-y-3 ml-2">
                   {service.features.map((feature, j) => (
                     <li key={j} className="flex items-start gap-3 text-gray-300 text-sm md:text-base">
@@ -593,10 +584,10 @@ export default function Portfolio() {
         </div>
       </section>
 
-      {/* Contact Section avec Formulaire Fonctionnel */}
+      {/* Contact Section */}
       <section id="contact" className="min-h-screen flex items-center justify-center px-4 py-12 md:py-16">
         <div className="max-w-6xl w-full">
-          <div className="text-center mb-6 md:mb-8">
+          <div className="reveal text-center mb-6 md:mb-8">
             <h2 className="text-3xl md:text-5xl font-bold mb-3 md:mb-4 text-white">
               Contact
             </h2>
@@ -604,18 +595,16 @@ export default function Portfolio() {
               Prêt à donner vie à votre projet ? Contactez-moi pour discuter de vos besoins en développement web et mobile
             </p>
           </div>
-
           <div className="grid md:grid-cols-2 gap-6 md:gap-8">
-            {/* Left Side - Informations */}
-            <div className="backdrop-blur-lg bg-gray-900/50 rounded-3xl p-6 md:p-8 border border-gray-800 space-y-6 md:space-y-8">
+            {/* Left Side */}
+            <div className="reveal reveal-left reveal-delay-1 backdrop-blur-lg bg-gray-900/50 rounded-3xl p-6 md:p-8 border border-gray-800 space-y-6 md:space-y-8">
               <div>
                 <h3 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">Travaillons ensemble</h3>
                 <p className="text-gray-400 leading-relaxed text-sm md:text-base">
-                En tant que développeur Full-Stack basé à Abidjan, je combine expertise technique et compréhension des enjeux locaux pour créer des solutions innovantes adaptées à vos besoins.</p>
+                  En tant que développeur Full-Stack basé à Abidjan, je combine expertise technique et compréhension des enjeux locaux pour créer des solutions innovantes adaptées à vos besoins.
+                </p>
               </div>
-
-             {/* Contact Info Cards */}
-             <div className="space-y-3 md:space-y-4">
+              <div className="space-y-3 md:space-y-4">
                 <div className="flex items-start gap-3 md:gap-4 p-3 md:p-4 rounded-xl bg-gray-800/50 border border-gray-800 hover:bg-gray-800 transition-all duration-300">
                   <div className="p-2 rounded-lg bg-gray-700">
                     <Phone className="w-4 h-4 md:w-5 md:h-5 text-white" />
@@ -662,20 +651,18 @@ export default function Portfolio() {
             </div>
 
             {/* Right Side - Form */}
-            <div className="backdrop-blur-lg bg-gray-900/50 rounded-3xl p-6 md:p-8 border border-gray-800">
+            <div className="reveal reveal-right reveal-delay-2 backdrop-blur-lg bg-gray-900/50 rounded-3xl p-6 md:p-8 border border-gray-800">
               <h3 className="text-xl md:text-2xl font-bold mb-5 md:mb-6">Envoyez-moi un message</h3>
-              
               <form onSubmit={handleSubmit} className="space-y-4 md:space-y-5">
                 {formStatus.message && (
                   <div className={`p-3 md:p-4 rounded-xl border text-sm md:text-base ${
-                    formStatus.type === 'success' 
-                      ? 'bg-green-500/10 border-green-500/50 text-green-300' 
+                    formStatus.type === 'success'
+                      ? 'bg-green-500/10 border-green-500/50 text-green-300'
                       : 'bg-red-500/10 border-red-500/50 text-red-300'
                   }`}>
                     {formStatus.message}
                   </div>
                 )}
-
                 <div>
                   <label className="block text-xs md:text-sm text-gray-300 mb-2">Nom complet</label>
                   <input
@@ -688,7 +675,6 @@ export default function Portfolio() {
                     className="w-full px-3 md:px-4 py-2 md:py-3 rounded-xl backdrop-blur-sm bg-gray-800/50 border border-gray-700 focus:border-white outline-none transition-colors text-white placeholder-gray-500 text-sm md:text-base"
                   />
                 </div>
-
                 <div>
                   <label className="block text-xs md:text-sm text-gray-300 mb-2">Adresse email</label>
                   <input
@@ -701,7 +687,6 @@ export default function Portfolio() {
                     className="w-full px-3 md:px-4 py-2 md:py-3 rounded-xl backdrop-blur-sm bg-gray-800/50 border border-gray-700 focus:border-white outline-none transition-colors text-white placeholder-gray-500 text-sm md:text-base"
                   />
                 </div>
-
                 <div>
                   <label className="block text-xs md:text-sm text-gray-300 mb-2">Service</label>
                   <select
@@ -716,7 +701,6 @@ export default function Portfolio() {
                     <option value="mobile" className="bg-black">Développement Mobile</option>
                   </select>
                 </div>
-
                 <div>
                   <label className="block text-xs md:text-sm text-gray-300 mb-2">Message</label>
                   <textarea
@@ -729,7 +713,6 @@ export default function Portfolio() {
                     className="w-full px-3 md:px-4 py-2 md:py-3 rounded-xl backdrop-blur-sm bg-gray-800/50 border border-gray-700 focus:border-white outline-none transition-colors resize-none text-white placeholder-gray-500 text-sm md:text-base"
                   />
                 </div>
-
                 <button
                   type="submit"
                   disabled={isSubmitting}
@@ -743,31 +726,13 @@ export default function Portfolio() {
           </div>
         </div>
       </section>
-      
+
       {/* Footer */}
       <footer className="backdrop-blur-md bg-gray-900/50 border-t border-gray-800 py-6 md:py-8">
         <div className="max-w-6xl mx-auto px-4 text-center text-gray-400 text-sm md:text-base">
           <p>&copy; 2025 Désiré Yeo. Tous droits réservés.</p>
         </div>
       </footer>
-
-      <style jsx>{`
-        @keyframes blob {
-          0% { transform: translate(0px, 0px) scale(1); }
-          33% { transform: translate(30px, -50px) scale(1.1); }
-          66% { transform: translate(-20px, 20px) scale(0.9); }
-          100% { transform: translate(0px, 0px) scale(1); }
-        }
-        .animate-blob {
-          animation: blob 7s infinite;
-        }
-        .animation-delay-2000 {
-          animation-delay: 2s;
-        }
-        .animation-delay-4000 {
-          animation-delay: 4s;
-        }
-      `}</style>
     </div>
   );
 }
